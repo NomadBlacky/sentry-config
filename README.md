@@ -50,3 +50,30 @@ Using `sentry.properties`:
 ```
 factory=org.nomadblacky.sentry.config.SentryClientFactory
 ```
+
+## Supported [configurations](https://docs.sentry.io/clients/java/config/)
+
+|Key                              |Supported|
+|:--------------------------------|:-------:|
+|DSN                              |true     |
+|Release                          |false    |
+|Distribution                     |false    |
+|Environment                      |false    |
+|Server Name                      |false    |
+|Tags                             |false    |
+|MDC Tags                         |false    |
+|Extra Data                       |false    |
+|"In Application" Stack Frames    |false    |
+|Same Frame as Enclosing Exception|false    |
+|Event Sampling                   |false    |
+|Uncaught Exception Handler       |false    |
+|Buffering Events to Disk         |false    |
+|Graceful Shutdown of Buffering   |false    |
+|Async Connection                 |false    |
+|Graceful Shutdown of Async       |false    |
+|Async Queue Size                 |false    |
+|Async Threads Count              |false    |
+|Async Threads Priority           |false    |
+|Max Message Size                 |false    |
+|Timeout                          |false    |
+|Using a Proxy                    |false    |
