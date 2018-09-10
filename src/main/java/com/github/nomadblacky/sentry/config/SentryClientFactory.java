@@ -1,4 +1,4 @@
-package org.nomadblacky.sentry.config;
+package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;

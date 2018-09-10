@@ -1,4 +1,4 @@
-package org.nomadblacky.sentry.config;
+package com.github.nomadblacky.sentry.config;
 
 import io.sentry.dsn.Dsn;
 import org.junit.jupiter.api.BeforeAll;

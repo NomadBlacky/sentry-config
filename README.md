@@ -8,7 +8,7 @@ Using Maven:
 
 ```xml
 <dependency>
-    <groupId>org.nomadblacky</groupId>
+    <groupId>com.github.nomadblacky</groupId>
     <artifactId>sentry-config</artifactId>
     <version>0.1.0</version>
 </dependency>
@@ -17,13 +17,13 @@ Using Maven:
 Using Gradle:
 
 ```groovy
-compile 'org.nomadblacky:sentry-config:0.1.0'
+compile 'com.github.nomadblacky:sentry-config:0.1.0'
 ```
 
 Using SBT:
 
 ```scala
-libraryDependencies += "org.nomadblacky" % "sentry-config" % "0.1.0"
+libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.1.0"
 ```
 
 ## Usage
@@ -42,13 +42,13 @@ sentry {
 Using JVM options:
 
 ```
-$ java -Dsentry.factory=org.nomadblacky.sentry.config.SentryClientFactory
+$ java -Dsentry.factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 ```
 
 Using `sentry.properties`:
 
 ```
-factory=org.nomadblacky.sentry.config.SentryClientFactory
+factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 ```
 
 ## Supported [configurations](https://docs.sentry.io/clients/java/config/)
