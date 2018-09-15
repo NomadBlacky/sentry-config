@@ -23,6 +23,10 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
         SentryClient client = new SentryClient(createConnection(dsn), getContextManager(dsn));
 
+        if (config.hasPath("release")) {
+            client.setRelease(config.getString("release"));
+        }
+
         return configureSentryClient(client, defaultDsn);
     }
 }

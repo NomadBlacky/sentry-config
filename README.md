@@ -56,7 +56,7 @@ factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 |Key                              |Supported|
 |:--------------------------------|:-------:|
 |DSN                              |true     |
-|Release                          |false    |
+|Release                          |true     |
 |Distribution                     |false    |
 |Environment                      |false    |
 |Server Name                      |false    |

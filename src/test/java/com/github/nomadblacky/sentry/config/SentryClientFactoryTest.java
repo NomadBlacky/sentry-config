@@ -1,6 +1,6 @@
 package com.github.nomadblacky.sentry.config;
 
-import io.sentry.dsn.Dsn;
+import io.sentry.SentryClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -9,15 +9,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SentryClientFactoryTest {
 
     private static SentryClientFactory FACTORY;
+    private static SentryClient CLIENT;
 
     @BeforeAll
     static void beforeAll() {
         FACTORY = new SentryClientFactory();
+        CLIENT = FACTORY.createSentryClient(null);
     }
 
     @Test
     void testToInitializeDsn() {
-        FACTORY.createSentryClient(null);
         assertThat(FACTORY.dsnString).isEqualTo("noop://localhost/1");
+    }
+
+    @Test
+    void testToInitializeRelease() {
+        assertThat(CLIENT.getRelease()).isEqualTo("0.1.0");
     }
 }
