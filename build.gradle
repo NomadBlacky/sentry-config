@@ -1,6 +1,20 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("com.bmuschko:gradle-nexus-plugin:2.3.1")
+    }
+}
+
 plugins {
     id 'java-library'
+    id 'com.bmuschko.nexus' version '2.3.1'
 }
+
+group = "com.github.nomadblacky"
+version = "0.1.0"
+description = "Configure sentry-java by typesafe-config."
 
 repositories {
     jcenter()
@@ -12,4 +26,35 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.0'
     testCompile 'org.assertj:assertj-core:3.11.1'
     testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.0'
+}
+
+modifyPom {
+    project {
+        name 'sentry-config'
+        description 'Configure sentry-java by typesafe-config.'
+        url 'https://github.com/NomadBlacky/sentry-config'
+        inceptionYear '2018'
+
+        scm {
+            url 'https://github.com/NomadBlacky/sentry-config'
+            connection 'scm:https://NomadBlacky@github.com/NomadBlacky/sentry-config.git'
+            developerConnection 'scm:git://github.com/NomadBlacky/sentry-config.git'
+        }
+
+        licenses {
+            license {
+                name 'MIT License'
+                url 'https://opensource.org/licenses/mit-license.php'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'NomadBlacky'
+                name 'Takumi Kadowaki'
+                email 'hourou.hamurinzu@gmail.com'
+            }
+        }
+    }
 }
