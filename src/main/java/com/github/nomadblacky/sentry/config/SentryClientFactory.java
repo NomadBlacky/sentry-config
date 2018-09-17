@@ -2,9 +2,16 @@ package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValue;
+import com.typesafe.config.ConfigValueType;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
 import io.sentry.dsn.Dsn;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SentryClientFactory extends DefaultSentryClientFactory {
 
@@ -39,6 +46,28 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
             client.setEnvironment(config.getString("environment"));
         }
 
+        // Tags
+        if (config.hasPath("tags")) {
+            Map<String, String> tags = configToMap(config.getConfig("tags"));
+            client.setTags(tags);
+        }
+
         return configureSentryClient(client, defaultDsn);
+    }
+
+    private static Map<String, String> configToMap(Config config) {
+        return config.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> {
+            if (e.getValue().valueType() == ConfigValueType.STRING) {
+                return config.getString(e.getKey());
+            } else {
+                throw new IllegalArgumentException(String.format(
+                        "Invalid configuration type (%s) of \"%s\" in %s L%d. Please set with string.",
+                        e.getValue().valueType().name(),
+                        e.getKey(),
+                        config.origin().filename(),
+                        e.getValue().origin().lineNumber()
+                ));
+            }
+        }));
     }
 }

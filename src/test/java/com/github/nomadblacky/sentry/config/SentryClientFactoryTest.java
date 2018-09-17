@@ -1,9 +1,12 @@
 package com.github.nomadblacky.sentry.config;
 
 import io.sentry.SentryClient;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SentryClientFactoryTest {
@@ -35,5 +38,21 @@ class SentryClientFactoryTest {
     @Test
     void testToInitializeEnvironment() {
         assertThat(CLIENT.getEnvironment()).isEqualTo("development");
+    }
+
+    @Test
+    void testToInitializeTags() {
+        assertThat(CLIENT.getTags()).containsExactly(
+                entry("key1", "value1"),
+                entry("key2", "value2")
+        );
+    }
+
+    @Test
+    @Disabled
+    void testToThrowAnExceptionWhenInitializeTags() {
+        // TODO: 18/09/17 Implement this!
+        // If implement it now, will fail all tests.
+        // Because @BeforeAll will throw an exception when initializing invalid configurations.
     }
 }
