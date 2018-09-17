@@ -34,6 +34,11 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
             client.setDist(config.getString("distribution"));
         }
 
+        // Environment
+        if (config.hasPath("environment")) {
+            client.setEnvironment(config.getString("environment"));
+        }
+
         return configureSentryClient(client, defaultDsn);
     }
 }

@@ -31,4 +31,9 @@ class SentryClientFactoryTest {
     void testToInitializeDistribution() {
         assertThat(CLIENT.getDist()).isEqualTo("x86");
     }
+
+    @Test
+    void testToInitializeEnvironment() {
+        assertThat(CLIENT.getEnvironment()).isEqualTo("development");
+    }
 }
