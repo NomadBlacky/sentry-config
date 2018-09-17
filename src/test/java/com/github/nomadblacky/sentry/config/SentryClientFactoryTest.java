@@ -26,4 +26,9 @@ class SentryClientFactoryTest {
     void testToInitializeRelease() {
         assertThat(CLIENT.getRelease()).isEqualTo("0.1.0");
     }
+
+    @Test
+    void testToInitializeDistribution() {
+        assertThat(CLIENT.getDist()).isEqualTo("x86");
+    }
 }

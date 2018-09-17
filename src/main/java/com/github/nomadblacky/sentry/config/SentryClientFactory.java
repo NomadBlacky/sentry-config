@@ -15,6 +15,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
     public SentryClient createSentryClient(Dsn defaultDsn) {
         Config config = ConfigFactory.load().getConfig("sentry");
 
+        // DSN
         Dsn dsn = defaultDsn;
         if (config.hasPath("dsn")) {
             dsnString = config.getString("dsn");
@@ -23,8 +24,14 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
         SentryClient client = new SentryClient(createConnection(dsn), getContextManager(dsn));
 
+        // Release
         if (config.hasPath("release")) {
             client.setRelease(config.getString("release"));
+        }
+
+        // Distribution
+        if (config.hasPath("distribution")) {
+            client.setDist(config.getString("distribution"));
         }
 
         return configureSentryClient(client, defaultDsn);
