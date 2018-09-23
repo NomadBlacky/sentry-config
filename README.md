@@ -10,25 +10,27 @@ Using Maven:
 <dependency>
     <groupId>com.github.nomadblacky</groupId>
     <artifactId>sentry-config</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
 Using Gradle:
 
 ```groovy
-compile 'com.github.nomadblacky:sentry-config:0.1.0'
+compile 'com.github.nomadblacky:sentry-config:0.2.0'
 ```
 
 Using SBT:
 
 ```scala
-libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.1.0"
+libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.2.0"
 ```
 
 ## Usage
 
 ### Set configurations in `application.conf`
+
+[See the examples in `src/test/resources/application.conf`.](src/test/resources/application.conf)
 
 ```
 sentry {
@@ -52,8 +54,6 @@ factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 ```
 
 ## Supported [configurations](https://docs.sentry.io/clients/java/config/)
-
-[See the examples in `src/test/resources/application.conf`.](src/test/resources/application.conf)
 
 |Key                              |Supported|
 |:--------------------------------|:-------:|
