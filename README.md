@@ -53,18 +53,20 @@ factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 
 ## Supported [configurations](https://docs.sentry.io/clients/java/config/)
 
+[See the examples in `src/test/resources/application.conf`.](src/test/resources/application.conf)
+
 |Key                              |Supported|
 |:--------------------------------|:-------:|
 |DSN                              |true     |
 |Release                          |true     |
-|Distribution                     |false    |
-|Environment                      |false    |
-|Server Name                      |false    |
-|Tags                             |false    |
-|MDC Tags                         |false    |
-|Extra Data                       |false    |
-|"In Application" Stack Frames    |false    |
-|Same Frame as Enclosing Exception|false    |
+|Distribution                     |true     |
+|Environment                      |true     |
+|Server Name                      |true     |
+|Tags                             |true     |
+|MDC Tags                         |true     |
+|Extra Data                       |true     |
+|"In Application" Stack Frames    |true     |
+|Same Frame as Enclosing Exception|true     |
 |Event Sampling                   |false    |
 |Uncaught Exception Handler       |false    |
 |Buffering Events to Disk         |false    |
