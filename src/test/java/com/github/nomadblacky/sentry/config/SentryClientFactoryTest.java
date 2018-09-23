@@ -60,4 +60,12 @@ class SentryClientFactoryTest {
     void testToInitializeMdcTags() {
         assertThat(CLIENT.getMdcTags()).contains("mdcTag1", "mdcTag2");
     }
+
+    @Test
+    void testToInitializeExtraData() {
+        assertThat(CLIENT.getExtra()).containsOnly(
+                entry("ex1", "exValue1"),
+                entry("ex2", "exValue2")
+        );
+    }
 }
