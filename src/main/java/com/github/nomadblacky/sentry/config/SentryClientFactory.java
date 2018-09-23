@@ -2,7 +2,6 @@ package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueType;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
@@ -10,7 +9,6 @@ import io.sentry.dsn.Dsn;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SentryClientFactory extends DefaultSentryClientFactory {
@@ -62,6 +60,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
             Map<String, Object> extra = configToMap(config.getConfig("extra"))
                     .entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
             client.setExtra(extra);
+        }
+
+        // "In Application" Stack Frames
+        if (config.hasPath("stacktrace.app.packages")) {
+            String packages = config.getString("stacktrace.app.packages");
+            System.setProperty("sentry.stacktrace.app.packages", packages);
         }
 
         return configureSentryClient(client, defaultDsn);

@@ -3,8 +3,12 @@ package com.github.nomadblacky.sentry.config;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.sentry.SentryClient;
+import io.sentry.jvmti.FrameCache;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -58,6 +62,14 @@ class SentryClientFactoryTest {
                 entry("ex1", "exValue1"),
                 entry("ex2", "exValue2")
         );
+    }
+
+    @Test
+    void testToInitializeInApplicationStackFrames() throws Exception {
+        Field field = FrameCache.class.getDeclaredField("appPackages");
+        field.setAccessible(true);
+        Set<String> appPackages = (Set<String>) field.get(null);
+        assertThat(appPackages).containsOnly("com.github.nomadblacky", "sample.foo");
     }
 
     @Test
