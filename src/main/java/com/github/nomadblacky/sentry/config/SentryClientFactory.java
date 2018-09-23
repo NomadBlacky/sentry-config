@@ -8,7 +8,10 @@ import io.sentry.SentryClient;
 import io.sentry.dsn.Dsn;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class SentryClientFactory extends DefaultSentryClientFactory {
@@ -16,9 +19,11 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
     // FIXME: 18/09/09 This variable is to only use for tests.
     String dsnString;
 
+    private Config config;
+
     @Override
     public SentryClient createSentryClient(Dsn defaultDsn) {
-        Config config = ConfigFactory.load().getConfig("sentry");
+        config = ConfigFactory.load().getConfig("sentry");
 
         // DSN
         Dsn dsn = defaultDsn;
@@ -30,51 +35,60 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         SentryClient client = new SentryClient(createConnection(dsn), getContextManager(dsn));
 
         // Release
-        if (config.hasPath("release")) {
-            client.setRelease(config.getString("release"));
-        }
+        tryToConfigreStringValue("release", client::setRelease);
 
         // Distribution
-        if (config.hasPath("distribution")) {
-            client.setDist(config.getString("distribution"));
-        }
+        tryToConfigreStringValue("distribution", client::setDist);
 
         // Environment
-        if (config.hasPath("environment")) {
-            client.setEnvironment(config.getString("environment"));
-        }
+        tryToConfigreStringValue("environment", client::setEnvironment);
 
         // Tags
-        if (config.hasPath("tags")) {
-            Map<String, String> tags = configToMap(config.getConfig("tags"));
-            client.setTags(tags);
-        }
+        tryToConfigMapValue("tags", client::setTags);
 
         // MDC Tags
-        if (config.hasPath("mdctags")) {
-            client.setMdcTags(new HashSet<>(config.getStringList("mdctags")));
-        }
+        tryToConfigureStringListValue("mdctags", mdctags -> client.setMdcTags(new HashSet<>(mdctags)));
 
         // Extra Data
-        if (config.hasPath("extra")) {
-            Map<String, Object> extra = configToMap(config.getConfig("extra"))
-                    .entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-            client.setExtra(extra);
-        }
+        tryToConfigMapValue("extra", map -> {
+            client.setExtra(map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
+        });
 
         // "In Application" Stack Frames
-        if (config.hasPath("stacktrace.app.packages")) {
-            String packages = config.getString("stacktrace.app.packages");
-            System.setProperty("sentry.stacktrace.app.packages", packages);
-        }
+        tryToConfigreStringValue(
+                "stacktrace.app.packages",
+                packages -> System.setProperty("sentry.stacktrace.app.packages", packages)
+        );
 
         // Same Frame as Enclosing Exception
-        if (config.hasPath("stacktrace.hidecommon")) {
-            Boolean hideCommon = config.getBoolean("stacktrace.hidecommon");
-            System.setProperty("sentry.stacktrace.hidecommon", hideCommon.toString());
-        }
+        tryToConfigreBooleanValue(
+                "stacktrace.hidecommon",
+                hideCommon -> System.setProperty("sentry.stacktrace.hidecommon", hideCommon.toString())
+        );
 
         return configureSentryClient(client, defaultDsn);
+    }
+
+    private void tryToConfigreStringValue(String path, Consumer<String> configProc) {
+        tryToConfigure(path, configProc, () -> config.getString(path));
+    }
+
+    private void tryToConfigureStringListValue(String path, Consumer<List<String>> configProc) {
+        tryToConfigure(path, configProc, () -> config.getStringList(path));
+    }
+
+    private void tryToConfigreBooleanValue(String path, Consumer<Boolean> configProc) {
+        tryToConfigure(path, configProc, () -> config.getBoolean(path));
+    }
+
+    private void tryToConfigMapValue(String path, Consumer<Map<String, String>> configProc) {
+        tryToConfigure(path, configProc, () -> configToMap(config.getConfig(path)));
+    }
+
+    private <T> void tryToConfigure(String path, Consumer<T> configProc, Supplier<T> valueSupplier) {
+        if (config.hasPath(path)) {
+            configProc.accept(valueSupplier.get());
+        }
     }
 
     static Map<String, String> configToMap(Config config) {
