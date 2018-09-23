@@ -2,12 +2,15 @@ package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
+import io.sentry.dsn.Dsn;
 import io.sentry.jvmti.FrameCache;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
@@ -70,6 +73,14 @@ class SentryClientFactoryTest {
         field.setAccessible(true);
         Set<String> appPackages = (Set<String>) field.get(null);
         assertThat(appPackages).containsOnly("com.github.nomadblacky", "sample.foo");
+    }
+
+    @Test
+    void testToInitializeHideCommon() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getHideCommonFramesEnabled", Dsn.class);
+        method.setAccessible(true);
+        boolean hideCommon = (boolean) method.invoke(FACTORY, (Dsn) null);
+        assertThat(hideCommon).isFalse();
     }
 
     @Test

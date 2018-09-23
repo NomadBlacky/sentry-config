@@ -68,6 +68,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
             System.setProperty("sentry.stacktrace.app.packages", packages);
         }
 
+        // Same Frame as Enclosing Exception
+        if (config.hasPath("stacktrace.hidecommon")) {
+            Boolean hideCommon = config.getBoolean("stacktrace.hidecommon");
+            System.setProperty("sentry.stacktrace.hidecommon", hideCommon.toString());
+        }
+
         return configureSentryClient(client, defaultDsn);
     }
 
