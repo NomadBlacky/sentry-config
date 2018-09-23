@@ -1,13 +1,12 @@
 package com.github.nomadblacky.sentry.config;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import io.sentry.SentryClient;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class SentryClientFactoryTest {
 
@@ -49,14 +48,6 @@ class SentryClientFactoryTest {
     }
 
     @Test
-    @Disabled
-    void testToThrowAnExceptionWhenInitializeTags() {
-        // TODO: 18/09/17 Implement this!
-        // If implement it now, will fail all tests.
-        // Because @BeforeAll will throw an exception when initializing invalid configurations.
-    }
-
-    @Test
     void testToInitializeMdcTags() {
         assertThat(CLIENT.getMdcTags()).containsOnly("mdcTag1", "mdcTag2");
     }
@@ -67,5 +58,13 @@ class SentryClientFactoryTest {
                 entry("ex1", "exValue1"),
                 entry("ex2", "exValue2")
         );
+    }
+
+    @Test
+    void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
+        Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> SentryClientFactory.configToMap(config))
+                .withMessageContaining("Invalid configuration type (NUMBER) of \"hoge.invalid\"");
     }
 }

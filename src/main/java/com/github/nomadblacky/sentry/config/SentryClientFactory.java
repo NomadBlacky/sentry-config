@@ -67,7 +67,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         return configureSentryClient(client, defaultDsn);
     }
 
-    private static Map<String, String> configToMap(Config config) {
+    static Map<String, String> configToMap(Config config) {
         return config.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> {
             if (e.getValue().valueType() == ConfigValueType.STRING) {
                 return config.getString(e.getKey());
