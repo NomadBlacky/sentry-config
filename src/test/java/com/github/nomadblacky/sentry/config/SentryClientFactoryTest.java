@@ -42,7 +42,7 @@ class SentryClientFactoryTest {
 
     @Test
     void testToInitializeTags() {
-        assertThat(CLIENT.getTags()).containsExactly(
+        assertThat(CLIENT.getTags()).containsOnly(
                 entry("key1", "value1"),
                 entry("key2", "value2")
         );
@@ -58,7 +58,7 @@ class SentryClientFactoryTest {
 
     @Test
     void testToInitializeMdcTags() {
-        assertThat(CLIENT.getMdcTags()).contains("mdcTag1", "mdcTag2");
+        assertThat(CLIENT.getMdcTags()).containsOnly("mdcTag1", "mdcTag2");
     }
 
     @Test
