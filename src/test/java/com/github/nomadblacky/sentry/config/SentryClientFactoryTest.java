@@ -55,4 +55,9 @@ class SentryClientFactoryTest {
         // If implement it now, will fail all tests.
         // Because @BeforeAll will throw an exception when initializing invalid configurations.
     }
+
+    @Test
+    void testToInitializeMdcTags() {
+        assertThat(CLIENT.getMdcTags()).contains("mdcTag1", "mdcTag2");
+    }
 }

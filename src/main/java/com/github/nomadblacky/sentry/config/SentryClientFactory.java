@@ -52,6 +52,11 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
             client.setTags(tags);
         }
 
+        // MDC Tags
+        if (config.hasPath("mdctags")) {
+            client.setMdcTags(new HashSet<>(config.getStringList("mdctags")));
+        }
+
         return configureSentryClient(client, defaultDsn);
     }
 
