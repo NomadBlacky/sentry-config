@@ -1,4 +1,4 @@
-# WIP: sentry-config
+# sentry-config
 
 Configure [sentry-java](https://github.com/getsentry/sentry-java) by [typesafe-config](https://github.com/lightbend/config).
 
