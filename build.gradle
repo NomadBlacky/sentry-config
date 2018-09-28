@@ -16,6 +16,8 @@ group = "com.github.nomadblacky"
 version = "0.2.0"
 description = "Configure sentry-java by typesafe-config."
 
+sourceCompatibility = 1.8
+
 repositories {
     jcenter()
 }
