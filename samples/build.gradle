@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+mainClassName = 'App'
+
+dependencies {
+    compile 'com.github.nomadblacky:sentry-config:0.2.0'
+    compile 'io.sentry:sentry-logback:1.7.10'
+}
+
+repositories {
+    jcenter()
+}
