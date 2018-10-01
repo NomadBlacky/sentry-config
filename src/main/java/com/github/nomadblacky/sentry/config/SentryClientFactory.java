@@ -69,6 +69,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         // Event Sampling
         tryToConfigureDoubleValue("sample.rate", rate -> System.setProperty("sentry.sample.rate", rate.toString()));
 
+        // Uncaught Exception Handler
+        tryToConfigureBooleanValue(
+                "uncaught.handler.enabled",
+                isEnabled -> System.setProperty("sentry.uncaught.handler.enabled", isEnabled.toString())
+        );
+
         return configureSentryClient(client, defaultDsn);
     }
 

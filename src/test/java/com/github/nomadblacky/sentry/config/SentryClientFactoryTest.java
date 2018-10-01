@@ -92,6 +92,14 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToInitializeUncaughtExceptionHandlerEnabled() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getUncaughtHandlerEnabled", Dsn.class);
+        method.setAccessible(true);
+        Boolean isEnabled = (Boolean) method.invoke(FACTORY, (Dsn) null);
+        assertThat(isEnabled).isFalse();
+    }
+
+    @Test
     void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
         Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
         assertThatExceptionOfType(IllegalArgumentException.class)
