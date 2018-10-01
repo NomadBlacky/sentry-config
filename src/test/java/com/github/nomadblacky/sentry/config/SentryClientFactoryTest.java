@@ -84,6 +84,14 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToInitializeEventSamplingRate() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getSampleRate", Dsn.class);
+        method.setAccessible(true);
+        Double rate = (Double) method.invoke(FACTORY, (Dsn) null);
+        assertThat(rate).isEqualTo(0.75);
+    }
+
+    @Test
     void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
         Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
         assertThatExceptionOfType(IllegalArgumentException.class)

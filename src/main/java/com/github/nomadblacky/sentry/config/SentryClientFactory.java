@@ -66,6 +66,9 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
                 hideCommon -> System.setProperty("sentry.stacktrace.hidecommon", hideCommon.toString())
         );
 
+        // Event Sampling
+        tryToConfigureDoubleValue("sample.rate", rate -> System.setProperty("sentry.sample.rate", rate.toString()));
+
         return configureSentryClient(client, defaultDsn);
     }
 
@@ -75,6 +78,10 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     private void tryToConfigureStringListValue(String path, Consumer<List<String>> configProc) {
         tryToConfigure(path, configProc, () -> config.getStringList(path));
+    }
+
+    private void tryToConfigureDoubleValue(String path, Consumer<Double> configProc) {
+        tryToConfigure(path, configProc, () -> config.getDouble(path));
     }
 
     private void tryToConfigreBooleanValue(String path, Consumer<Boolean> configProc) {
