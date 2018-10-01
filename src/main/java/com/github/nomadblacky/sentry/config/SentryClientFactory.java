@@ -38,7 +38,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         tryToConfigreStringValue(RELEASE_OPTION, client::setRelease);
 
         // Distribution
-        tryToConfigreStringValue("distribution", client::setDist);
+        tryToConfigreStringValue(DIST_OPTION, client::setDist);
 
         // Environment
         tryToConfigreStringValue(ENVIRONMENT_OPTION, client::setEnvironment);
