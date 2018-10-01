@@ -35,45 +35,36 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         SentryClient client = new SentryClient(createConnection(dsn), getContextManager(dsn));
 
         // Release
-        tryToConfigreStringValue("release", client::setRelease);
+        tryToConfigreStringValue(RELEASE_OPTION, client::setRelease);
 
         // Distribution
         tryToConfigreStringValue("distribution", client::setDist);
 
         // Environment
-        tryToConfigreStringValue("environment", client::setEnvironment);
+        tryToConfigreStringValue(ENVIRONMENT_OPTION, client::setEnvironment);
 
         // Tags
-        tryToConfigMapValue("tags", client::setTags);
+        tryToConfigMapValue(TAGS_OPTION, client::setTags);
 
         // MDC Tags
-        tryToConfigureStringListValue("mdctags", mdctags -> client.setMdcTags(new HashSet<>(mdctags)));
+        tryToConfigureStringListValue(MDCTAGS_OPTION, mdctags -> client.setMdcTags(new HashSet<>(mdctags)));
 
         // Extra Data
-        tryToConfigMapValue("extra", map -> {
+        tryToConfigMapValue(EXTRA_OPTION, map -> {
             client.setExtra(map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
         });
 
         // "In Application" Stack Frames
-        tryToConfigreStringValue(
-                "stacktrace.app.packages",
-                packages -> System.setProperty("sentry.stacktrace.app.packages", packages)
-        );
+        tryToConfigreStringValue(IN_APP_FRAMES_OPTION, settingSentryProperty(IN_APP_FRAMES_OPTION));
 
         // Same Frame as Enclosing Exception
-        tryToConfigureBooleanValue(
-                "stacktrace.hidecommon",
-                hideCommon -> System.setProperty("sentry.stacktrace.hidecommon", hideCommon.toString())
-        );
+        tryToConfigureBooleanValue(HIDE_COMMON_FRAMES_OPTION, settingSentryProperty(HIDE_COMMON_FRAMES_OPTION));
 
         // Event Sampling
-        tryToConfigureDoubleValue("sample.rate", rate -> System.setProperty("sentry.sample.rate", rate.toString()));
+        tryToConfigureDoubleValue(SAMPLE_RATE_OPTION, settingSentryProperty(SAMPLE_RATE_OPTION));
 
         // Uncaught Exception Handler
-        tryToConfigureBooleanValue(
-                "uncaught.handler.enabled",
-                isEnabled -> System.setProperty("sentry.uncaught.handler.enabled", isEnabled.toString())
-        );
+        tryToConfigureBooleanValue(UNCAUGHT_HANDLER_ENABLED_OPTION, settingSentryProperty(UNCAUGHT_HANDLER_ENABLED_OPTION));
 
         return configureSentryClient(client, defaultDsn);
     }
@@ -102,6 +93,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         if (config.hasPath(path)) {
             configProc.accept(valueSupplier.get());
         }
+    }
+
+    private static final String SENTRY_PROPERTY_PREFIX = "sentry.";
+
+    private static <T> Consumer<T> settingSentryProperty(String suffix) {
+        return obj -> System.setProperty(SENTRY_PROPERTY_PREFIX + suffix, obj.toString());
     }
 
     static Map<String, String> configToMap(Config config) {
