@@ -61,7 +61,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         );
 
         // Same Frame as Enclosing Exception
-        tryToConfigreBooleanValue(
+        tryToConfigureBooleanValue(
                 "stacktrace.hidecommon",
                 hideCommon -> System.setProperty("sentry.stacktrace.hidecommon", hideCommon.toString())
         );
@@ -84,7 +84,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         tryToConfigure(path, configProc, () -> config.getDouble(path));
     }
 
-    private void tryToConfigreBooleanValue(String path, Consumer<Boolean> configProc) {
+    private void tryToConfigureBooleanValue(String path, Consumer<Boolean> configProc) {
         tryToConfigure(path, configProc, () -> config.getBoolean(path));
     }
 
