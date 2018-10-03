@@ -131,6 +131,14 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToInitializeBufferShutdownTimeout() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getBufferedConnectionShutdownTimeout", Dsn.class);
+        method.setAccessible(true);
+        long bufferFlushTime = (long) method.invoke(FACTORY, (Dsn) null);
+        assertThat(bufferFlushTime).isEqualTo(300000);
+    }
+
+    @Test
     void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
         Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
         assertThatExceptionOfType(IllegalArgumentException.class)
