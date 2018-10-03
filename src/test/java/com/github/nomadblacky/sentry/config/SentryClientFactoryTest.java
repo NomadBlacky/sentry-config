@@ -115,6 +115,14 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToInitializeBufferSize() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getBufferSize", Dsn.class);
+        method.setAccessible(true);
+        int bufferSize = (int) method.invoke(FACTORY, (Dsn) null);
+        assertThat(bufferSize).isEqualTo(100);
+    }
+
+    @Test
     void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
         Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
         assertThatExceptionOfType(IllegalArgumentException.class)
