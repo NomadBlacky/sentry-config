@@ -66,6 +66,8 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         // Uncaught Exception Handler
         tryToConfigureBooleanValue(UNCAUGHT_HANDLER_ENABLED_OPTION, settingSentryProperty(UNCAUGHT_HANDLER_ENABLED_OPTION));
 
+        // Buffering
+        tryToConfigureBooleanValue(BUFFER_ENABLED_OPTION, settingSentryProperty(BUFFER_ENABLED_OPTION));
         return configureSentryClient(client, defaultDsn);
     }
 
