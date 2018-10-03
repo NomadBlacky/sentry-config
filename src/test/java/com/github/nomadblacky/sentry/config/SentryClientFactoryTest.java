@@ -123,6 +123,14 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToInitializeBufferFlushTime() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getBufferFlushtime", Dsn.class);
+        method.setAccessible(true);
+        long bufferFlushTime = (long) method.invoke(FACTORY, (Dsn) null);
+        assertThat(bufferFlushTime).isEqualTo(200000);
+    }
+
+    @Test
     void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
         Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
         assertThatExceptionOfType(IllegalArgumentException.class)

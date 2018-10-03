@@ -70,6 +70,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         tryToConfigureBooleanValue(BUFFER_ENABLED_OPTION, settingSentryProperty(BUFFER_ENABLED_OPTION));
         tryToConfigreStringValue(BUFFER_DIR_OPTION, settingSentryProperty(BUFFER_DIR_OPTION));
         tryToConfigureIntValue(BUFFER_SIZE_OPTION, settingSentryProperty(BUFFER_SIZE_OPTION));
+        tryToConfigureLongValue(BUFFER_FLUSHTIME_OPTION, settingSentryProperty(BUFFER_FLUSHTIME_OPTION));
         return configureSentryClient(client, defaultDsn);
     }
 
@@ -83,6 +84,10 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     private void tryToConfigureIntValue(String path, Consumer<Integer> configProc) {
         tryToConfigure(path, configProc, () -> config.getInt(path));
+    }
+
+    private void tryToConfigureLongValue(String path, Consumer<Long> configProc) {
+        tryToConfigure(path, configProc, () -> config.getLong(path));
     }
 
     private void tryToConfigureDoubleValue(String path, Consumer<Double> configProc) {
