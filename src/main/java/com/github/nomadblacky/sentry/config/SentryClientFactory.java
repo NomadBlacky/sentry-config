@@ -68,6 +68,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
         // Buffering
         tryToConfigureBooleanValue(BUFFER_ENABLED_OPTION, settingSentryProperty(BUFFER_ENABLED_OPTION));
+        tryToConfigreStringValue(BUFFER_DIR_OPTION, settingSentryProperty(BUFFER_DIR_OPTION));
         return configureSentryClient(client, defaultDsn);
     }
 

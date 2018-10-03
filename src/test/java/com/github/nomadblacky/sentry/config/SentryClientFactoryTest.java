@@ -4,6 +4,7 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
+import io.sentry.config.Lookup;
 import io.sentry.dsn.Dsn;
 import io.sentry.jvmti.FrameCache;
 import org.junit.jupiter.api.BeforeAll;
@@ -105,6 +106,12 @@ class SentryClientFactoryTest {
         method.setAccessible(true);
         Boolean isEnabled = (Boolean) method.invoke(FACTORY, (Dsn) null);
         assertThat(isEnabled).isFalse();
+    }
+
+    @Test
+    void testToInitializeBufferDir() {
+        String bufferDir = Lookup.lookup(DefaultSentryClientFactory.BUFFER_DIR_OPTION, null);
+        assertThat(bufferDir).isEqualTo("./buffer");
     }
 
     @Test
