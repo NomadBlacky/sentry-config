@@ -139,6 +139,13 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToInitializeGracefulShutdownEnabled() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getBufferedConnectionGracefulShutdownEnabled", Dsn.class);
+        method.setAccessible(true);
+        boolean isEnabled = (boolean) method.invoke(FACTORY, (Dsn) null);
+        assertThat(isEnabled).isFalse();
+    }
+    @Test
     void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
         Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
         assertThatExceptionOfType(IllegalArgumentException.class)
