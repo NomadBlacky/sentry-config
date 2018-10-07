@@ -76,6 +76,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
         // Async Connection
         tryToConfigureBooleanValue("async.enabled", settingSentryProperty(ASYNC_OPTION));
+        tryToConfigureLongValue(ASYNC_SHUTDOWN_TIMEOUT_OPTION, settingSentryProperty(ASYNC_SHUTDOWN_TIMEOUT_OPTION));
 
         return configureSentryClient(client, defaultDsn);
     }

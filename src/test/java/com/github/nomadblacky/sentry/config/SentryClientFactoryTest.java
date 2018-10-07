@@ -155,6 +155,14 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToIntializeAsyncShutdownTimeout() throws Exception {
+        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getAsyncShutdownTimeout", Dsn.class);
+        method.setAccessible(true);
+        long isEnabled = (long) method.invoke(FACTORY, (Dsn) null);
+        assertThat(isEnabled).isEqualTo(500L);
+    }
+
+    @Test
     void testConfigToMapThrowAnErrorIfSetInvalidConfigurationType() {
         Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
         assertThatExceptionOfType(IllegalArgumentException.class)
