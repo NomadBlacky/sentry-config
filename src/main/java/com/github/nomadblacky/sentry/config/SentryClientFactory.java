@@ -43,6 +43,9 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         // Environment
         tryToConfigreStringValue(ENVIRONMENT_OPTION, client::setEnvironment);
 
+        // Server Name
+        tryToConfigreStringValue(SERVERNAME_OPTION, client::setServerName);
+
         // Tags
         tryToConfigMapValue(TAGS_OPTION, client::setTags);
 

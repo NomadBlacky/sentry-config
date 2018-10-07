@@ -48,6 +48,11 @@ class SentryClientFactoryTest {
     }
 
     @Test
+    void testToInitializeServerName() {
+        assertThat(CLIENT.getServerName()).isEqualTo("dev-server");
+    }
+
+    @Test
     void testToInitializeTags() {
         assertThat(CLIENT.getTags()).containsOnly(
                 entry("key1", "value1"),
