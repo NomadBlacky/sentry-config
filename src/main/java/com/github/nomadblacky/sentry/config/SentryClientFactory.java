@@ -75,7 +75,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         tryToConfigureBooleanValue(BUFFER_GRACEFUL_SHUTDOWN_OPTION, settingSentryProperty(BUFFER_GRACEFUL_SHUTDOWN_OPTION));
 
         // Async Connection
-        tryToConfigureBooleanValue(ASYNC_OPTION, settingSentryProperty(ASYNC_OPTION));
+        tryToConfigureBooleanValue("async.enabled", settingSentryProperty(ASYNC_OPTION));
 
         return configureSentryClient(client, defaultDsn);
     }
