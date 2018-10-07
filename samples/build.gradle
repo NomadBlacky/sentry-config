@@ -6,7 +6,7 @@ plugins {
 mainClassName = 'App'
 
 dependencies {
-    compile 'com.github.nomadblacky:sentry-config:0.2.0'
+    compile 'com.github.nomadblacky:sentry-config:0.3.0'
     compile 'io.sentry:sentry-logback:1.7.10'
 }
 

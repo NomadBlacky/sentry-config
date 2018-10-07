@@ -10,20 +10,20 @@ Using Maven:
 <dependency>
     <groupId>com.github.nomadblacky</groupId>
     <artifactId>sentry-config</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
 Using Gradle:
 
 ```groovy
-compile 'com.github.nomadblacky:sentry-config:0.2.0'
+compile 'com.github.nomadblacky:sentry-config:0.3.0'
 ```
 
 Using SBT:
 
 ```scala
-libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.2.0"
+libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.3.0"
 ```
 
 ## Usage
@@ -55,27 +55,43 @@ factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 
 ## Supported [configurations](https://docs.sentry.io/clients/java/config/)
 
-|Key                              |Supported|
-|:--------------------------------|:-------:|
-|DSN                              |true     |
-|Release                          |true     |
-|Distribution                     |true     |
-|Environment                      |true     |
-|Server Name                      |true     |
-|Tags                             |true     |
-|MDC Tags                         |true     |
-|Extra Data                       |true     |
-|"In Application" Stack Frames    |true     |
-|Same Frame as Enclosing Exception|true     |
-|Event Sampling                   |false    |
-|Uncaught Exception Handler       |false    |
-|Buffering Events to Disk         |false    |
-|Graceful Shutdown of Buffering   |false    |
-|Async Connection                 |false    |
-|Graceful Shutdown of Async       |false    |
-|Async Queue Size                 |false    |
-|Async Threads Count              |false    |
-|Async Threads Priority           |false    |
-|Max Message Size                 |false    |
-|Timeout                          |false    |
-|Using a Proxy                    |false    |
+| Key                                | Supported   |
+| :--------------------------------- | :---------: |
+| ASYNC_GRACEFUL_SHUTDOWN_OPTION     |             |
+| ASYNC_OPTION                       | true        |
+| ASYNC_PRIORITY_OPTION              |             |
+| ASYNC_QUEUE_DISCARDNEW             |             |
+| ASYNC_QUEUE_DISCARDOLD             |             |
+| ASYNC_QUEUE_DISCARDOLD             |             |
+| ASYNC_QUEUE_OVERFLOW_OPTION        |             |
+| ASYNC_QUEUE_SIZE_OPTION            |             |
+| ASYNC_QUEUE_SYNC                   |             |
+| ASYNC_SHUTDOWN_TIMEOUT_OPTION      | true        |
+| ASYNC_THREADS_OPTION               |             |
+| BUFFER_DIR_OPTION                  | true        |
+| BUFFER_ENABLED_OPTION              | true        |
+| BUFFER_FLUSHTIME_OPTION            | true        |
+| BUFFER_GRACEFUL_SHUTDOWN_OPTION    | true        |
+| BUFFER_SHUTDOWN_TIMEOUT_OPTION     | true        |
+| BUFFER_SIZE_OPTION                 | true        |
+| COMPRESSION_OPTION                 |             |
+| DIST_OPTION                        | true        |
+| DSN                                | true        |
+| ENVIRONMENT_OPTION                 | true        |
+| EXTRATAGS_OPTION (Deprecated)      |             |
+| EXTRA_OPTION                       | true        |
+| HIDE_COMMON_FRAMES_OPTION          | true        |
+| HTTP_PROXY_HOST_OPTION             |             |
+| HTTP_PROXY_PASS_OPTION             |             |
+| HTTP_PROXY_PORT_OPTION             |             |
+| HTTP_PROXY_USER_OPTION             |             |
+| IN_APP_FRAMES_OPTION               | true        |
+| MAX_MESSAGE_LENGTH_OPTION          |             |
+| MDCTAGS_OPTION                     | true        |
+| NAIVE_PROTOCOL                     |             |
+| RELEASE_OPTION                     | true        |
+| SAMPLE_RATE_OPTION                 | true        |
+| SERVERNAME_OPTION                  | true        |
+| TAGS_OPTION                        | true        |
+| TIMEOUT_OPTION                     |             |
+| UNCAUGHT_HANDLER_ENABLED_OPTION    | true        |
