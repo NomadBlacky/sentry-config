@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'App'
+mainClassName = 'com.github.nomadblacky.sentry.config.samples.App'
 
 dependencies {
     compile 'com.github.nomadblacky:sentry-config:0.3.0'
