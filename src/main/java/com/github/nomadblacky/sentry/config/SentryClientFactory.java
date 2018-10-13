@@ -2,6 +2,7 @@ package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueType;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
@@ -58,9 +59,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
             client.setExtra(map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
         });
 
-        // "In Application" Stack Frames
-        tryToConfigreStringValue(IN_APP_FRAMES_OPTION, settingSentryProperty(IN_APP_FRAMES_OPTION));
-
         // Same Frame as Enclosing Exception
         tryToConfigureBooleanValue(HIDE_COMMON_FRAMES_OPTION, settingSentryProperty(HIDE_COMMON_FRAMES_OPTION));
 
@@ -92,6 +90,22 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected Collection<String> getInAppFrames(Dsn dsn) {
+        ConfigValue configValue = config.getValue(IN_APP_FRAMES_OPTION);
+
+        if (configValue.valueType() == ConfigValueType.STRING) {
+            String value = config.getString(IN_APP_FRAMES_OPTION);
+            List<String> packages = Arrays
+                    .stream(value.split(","))
+                    .filter(pkg -> !pkg.trim().equals(""))
+                    .collect(Collectors.toList());
+            return packages;
+        } else if (configValue.valueType() == ConfigValueType.LIST) {
+            List<String> pkgs = config.getStringList(IN_APP_FRAMES_OPTION);
+            return pkgs
+                    .stream()
+                    .filter(pkg -> !pkg.trim().equals(""))
+                    .collect(Collectors.toList());
+        }
         return super.getInAppFrames(dsn);
     }
 
