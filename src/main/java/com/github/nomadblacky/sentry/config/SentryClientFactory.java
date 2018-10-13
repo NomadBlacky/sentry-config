@@ -5,11 +5,12 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValueType;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
+import io.sentry.buffer.Buffer;
+import io.sentry.context.ContextManager;
 import io.sentry.dsn.Dsn;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -82,6 +83,176 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
         tryToConfigureLongValue(ASYNC_SHUTDOWN_TIMEOUT_OPTION, settingSentryProperty(ASYNC_SHUTDOWN_TIMEOUT_OPTION));
 
         return configureSentryClient(client, defaultDsn);
+    }
+
+    @Override
+    protected ContextManager getContextManager(Dsn dsn) {
+        return super.getContextManager(dsn);
+    }
+
+    @Override
+    protected Collection<String> getInAppFrames(Dsn dsn) {
+        return super.getInAppFrames(dsn);
+    }
+
+    @Override
+    protected boolean getAsyncEnabled(Dsn dsn) {
+        return super.getAsyncEnabled(dsn);
+    }
+
+    @Override
+    protected RejectedExecutionHandler getRejectedExecutionHandler(Dsn dsn) {
+        return super.getRejectedExecutionHandler(dsn);
+    }
+
+    @Override
+    protected long getBufferedConnectionShutdownTimeout(Dsn dsn) {
+        return super.getBufferedConnectionShutdownTimeout(dsn);
+    }
+
+    @Override
+    protected boolean getBufferedConnectionGracefulShutdownEnabled(Dsn dsn) {
+        return super.getBufferedConnectionGracefulShutdownEnabled(dsn);
+    }
+
+    @Override
+    protected long getBufferFlushtime(Dsn dsn) {
+        return super.getBufferFlushtime(dsn);
+    }
+
+    @Override
+    protected long getAsyncShutdownTimeout(Dsn dsn) {
+        return super.getAsyncShutdownTimeout(dsn);
+    }
+
+    @Override
+    protected boolean getAsyncGracefulShutdownEnabled(Dsn dsn) {
+        return super.getAsyncGracefulShutdownEnabled(dsn);
+    }
+
+    @Override
+    protected int getAsyncQueueSize(Dsn dsn) {
+        return super.getAsyncQueueSize(dsn);
+    }
+
+    @Override
+    protected int getAsyncPriority(Dsn dsn) {
+        return super.getAsyncPriority(dsn);
+    }
+
+    @Override
+    protected int getAsyncThreads(Dsn dsn) {
+        return super.getAsyncThreads(dsn);
+    }
+
+    @Override
+    protected boolean getBypassSecurityEnabled(Dsn dsn) {
+        return super.getBypassSecurityEnabled(dsn);
+    }
+
+    @Override
+    protected Double getSampleRate(Dsn dsn) {
+        return super.getSampleRate(dsn);
+    }
+
+    @Override
+    protected int getProxyPort(Dsn dsn) {
+        return super.getProxyPort(dsn);
+    }
+
+    @Override
+    protected String getProxyHost(Dsn dsn) {
+        return super.getProxyHost(dsn);
+    }
+
+    @Override
+    protected String getProxyUser(Dsn dsn) {
+        return super.getProxyUser(dsn);
+    }
+
+    @Override
+    protected String getProxyPass(Dsn dsn) {
+        return super.getProxyPass(dsn);
+    }
+
+    @Override
+    protected String getRelease(Dsn dsn) {
+        return super.getRelease(dsn);
+    }
+
+    @Override
+    protected String getDist(Dsn dsn) {
+        return super.getDist(dsn);
+    }
+
+    @Override
+    protected String getEnvironment(Dsn dsn) {
+        return super.getEnvironment(dsn);
+    }
+
+    @Override
+    protected String getServerName(Dsn dsn) {
+        return super.getServerName(dsn);
+    }
+
+    @Override
+    protected Map<String, String> getTags(Dsn dsn) {
+        return super.getTags(dsn);
+    }
+
+    @Override
+    protected Set<String> getExtraTags(Dsn dsn) {
+        return super.getExtraTags(dsn);
+    }
+
+    @Override
+    protected Set<String> getMdcTags(Dsn dsn) {
+        return super.getMdcTags(dsn);
+    }
+
+    @Override
+    protected Map<String, String> getExtra(Dsn dsn) {
+        return super.getExtra(dsn);
+    }
+
+    @Override
+    protected boolean getCompressionEnabled(Dsn dsn) {
+        return super.getCompressionEnabled(dsn);
+    }
+
+    @Override
+    protected boolean getHideCommonFramesEnabled(Dsn dsn) {
+        return super.getHideCommonFramesEnabled(dsn);
+    }
+
+    @Override
+    protected int getMaxMessageLength(Dsn dsn) {
+        return super.getMaxMessageLength(dsn);
+    }
+
+    @Override
+    protected int getTimeout(Dsn dsn) {
+        return super.getTimeout(dsn);
+    }
+
+    @Override
+    protected boolean getBufferEnabled(Dsn dsn) {
+        return super.getBufferEnabled(dsn);
+    }
+
+    @Override
+    protected Buffer getBuffer(Dsn dsn) {
+        return super.getBuffer(dsn);
+    }
+
+    @Override
+    protected int getBufferSize(Dsn dsn) {
+        return super.getBufferSize(dsn);
+    }
+
+    @Override
+    protected boolean getUncaughtHandlerEnabled(Dsn dsn) {
+        return super.getUncaughtHandlerEnabled(dsn);
     }
 
     private void tryToConfigreStringValue(String path, Consumer<String> configProc) {
