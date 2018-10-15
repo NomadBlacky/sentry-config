@@ -90,7 +90,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected Collection<String> getInAppFrames(Dsn dsn) {
-        ConfigValue configValue = config.getValue(IN_APP_FRAMES_OPTION);
+        ConfigValue configValue;
+        if (config.hasPath(IN_APP_FRAMES_OPTION)) {
+           configValue = config.getValue(IN_APP_FRAMES_OPTION);
+        } else {
+            return super.getInAppFrames(dsn);
+        }
 
         if (configValue.valueType() == ConfigValueType.STRING) {
             String value = config.getString(IN_APP_FRAMES_OPTION);
