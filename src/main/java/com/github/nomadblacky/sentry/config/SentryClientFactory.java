@@ -18,6 +18,20 @@ import java.util.stream.Collectors;
 
 public class SentryClientFactory extends DefaultSentryClientFactory {
 
+    /**
+     * Entry point from sentry-java.
+     */
+    public SentryClientFactory() {}
+
+    /**
+     * Initialize by specified configuration.
+     *
+     * @param config configuration
+     */
+    public SentryClientFactory(Config config) {
+        this.config = config;
+    }
+
     // FIXME: 18/09/09 This variable is to only use for tests.
     String dsnString;
 
@@ -25,7 +39,9 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     public SentryClient createSentryClient(Dsn defaultDsn) {
-        config = ConfigFactory.load().getConfig("sentry");
+        if (this.config == null) {
+            config = ConfigFactory.load().getConfig("sentry");
+        }
 
         // DSN
         Dsn dsn = defaultDsn;
