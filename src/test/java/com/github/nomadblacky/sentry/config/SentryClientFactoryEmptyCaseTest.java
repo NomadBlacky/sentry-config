@@ -106,45 +106,38 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getProxyHost() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getProxyHost(null)).isNull();
     }
 
     @Test
-    @Ignore
     void getProxyUser() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getProxyUser(null)).isNull();
     }
 
     @Test
-    @Ignore
     void getProxyPass() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getProxyPass(null)).isNull();
     }
 
     @Test
-    @Ignore
     void getRelease() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getRelease(null)).isNull();
     }
 
     @Test
-    @Ignore
     void getDist() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getDist(null)).isNull();
     }
 
     @Test
-    @Ignore
     void getEnvironment() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getEnvironment(null)).isNull();
     }
 
     @Test
-    @Ignore
     void getServerName() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getServerName(null)).isNull();
     }
 
     @Test

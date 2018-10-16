@@ -52,18 +52,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
         SentryClient client = new SentryClient(createConnection(dsn), getContextManager(dsn));
 
-        // Release
-        tryToConfigreStringValue(RELEASE_OPTION, client::setRelease);
-
-        // Distribution
-        tryToConfigreStringValue(DIST_OPTION, client::setDist);
-
-        // Environment
-        tryToConfigreStringValue(ENVIRONMENT_OPTION, client::setEnvironment);
-
-        // Server Name
-        tryToConfigreStringValue(SERVERNAME_OPTION, client::setServerName);
-
         // Tags
         tryToConfigMapValue(TAGS_OPTION, client::setTags);
 
@@ -197,37 +185,37 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected String getProxyHost(Dsn dsn) {
-        return super.getProxyHost(dsn);
+        return tryToGetString(HTTP_PROXY_HOST_OPTION).orElseGet(() -> super.getProxyHost(dsn));
     }
 
     @Override
     protected String getProxyUser(Dsn dsn) {
-        return super.getProxyUser(dsn);
+        return tryToGetString(HTTP_PROXY_USER_OPTION).orElseGet(() -> super.getProxyUser(dsn));
     }
 
     @Override
     protected String getProxyPass(Dsn dsn) {
-        return super.getProxyPass(dsn);
+        return tryToGetString(HTTP_PROXY_PASS_OPTION).orElseGet(() -> super.getProxyPass(dsn));
     }
 
     @Override
     protected String getRelease(Dsn dsn) {
-        return super.getRelease(dsn);
+        return tryToGetString(RELEASE_OPTION).orElseGet(() -> super.getRelease(dsn));
     }
 
     @Override
     protected String getDist(Dsn dsn) {
-        return super.getDist(dsn);
+        return tryToGetString(DIST_OPTION).orElseGet(() -> super.getDist(dsn));
     }
 
     @Override
     protected String getEnvironment(Dsn dsn) {
-        return super.getEnvironment(dsn);
+        return tryToGetString(ENVIRONMENT_OPTION).orElseGet(() -> super.getEnvironment(dsn));
     }
 
     @Override
     protected String getServerName(Dsn dsn) {
-        return super.getServerName(dsn);
+        return tryToGetString(SERVERNAME_OPTION).orElseGet(() -> super.getServerName(dsn));
     }
 
     @Override
@@ -288,6 +276,13 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
     @Override
     protected boolean getUncaughtHandlerEnabled(Dsn dsn) {
         return super.getUncaughtHandlerEnabled(dsn);
+    }
+
+    private Optional<String> tryToGetString(String path) {
+        if (config.hasPath(path)) {
+            return Optional.of(config.getString(path));
+        }
+        return Optional.empty();
     }
 
     private void tryToConfigreStringValue(String path, Consumer<String> configProc) {
