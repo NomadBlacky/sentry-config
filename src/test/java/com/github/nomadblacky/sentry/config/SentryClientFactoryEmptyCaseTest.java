@@ -28,9 +28,8 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getAsyncEnabled() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getAsyncEnabled(null)).isTrue();
     }
 
     @Test
@@ -46,9 +45,8 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getBufferedConnectionGracefulShutdownEnabled() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getBufferedConnectionGracefulShutdownEnabled(null)).isTrue();
     }
 
     @Test
@@ -64,9 +62,8 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getAsyncGracefulShutdownEnabled() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getAsyncGracefulShutdownEnabled(null)).isTrue();
     }
 
     @Test
@@ -165,15 +162,13 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getCompressionEnabled() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getCompressionEnabled(null)).isTrue();
     }
 
     @Test
-    @Ignore
     void getHideCommonFramesEnabled() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getHideCommonFramesEnabled(null)).isTrue();
     }
 
     @Test
@@ -189,9 +184,8 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getBufferEnabled() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getBufferEnabled(null)).isTrue();
     }
 
     @Test
@@ -207,8 +201,7 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getUncaughtHandlerEnabled() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getUncaughtHandlerEnabled(null)).isTrue();
     }
 }

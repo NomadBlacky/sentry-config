@@ -82,11 +82,8 @@ class SentryClientFactoryTest {
     }
 
     @Test
-    void testToInitializeHideCommon() throws Exception {
-        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getHideCommonFramesEnabled", Dsn.class);
-        method.setAccessible(true);
-        boolean hideCommon = (boolean) method.invoke(FACTORY, (Dsn) null);
-        assertThat(hideCommon).isFalse();
+    void testToInitializeHideCommon() {
+        assertThat(FACTORY.getHideCommonFramesEnabled(null)).isFalse();
     }
 
     @Test
@@ -98,19 +95,13 @@ class SentryClientFactoryTest {
     }
 
     @Test
-    void testToInitializeUncaughtExceptionHandlerEnabled() throws Exception {
-        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getUncaughtHandlerEnabled", Dsn.class);
-        method.setAccessible(true);
-        Boolean isEnabled = (Boolean) method.invoke(FACTORY, (Dsn) null);
-        assertThat(isEnabled).isFalse();
+    void testToInitializeUncaughtExceptionHandlerEnabled() {
+        assertThat(FACTORY.getUncaughtHandlerEnabled(null)).isFalse();
     }
 
     @Test
     void testToInitializeBufferEnabled() throws Exception {
-        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getBufferEnabled", Dsn.class);
-        method.setAccessible(true);
-        Boolean isEnabled = (Boolean) method.invoke(FACTORY, (Dsn) null);
-        assertThat(isEnabled).isFalse();
+        assertThat(FACTORY.getBufferEnabled(null)).isFalse();
     }
 
     @Test
@@ -144,19 +135,13 @@ class SentryClientFactoryTest {
     }
 
     @Test
-    void testToInitializeGracefulShutdownEnabled() throws Exception {
-        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getBufferedConnectionGracefulShutdownEnabled", Dsn.class);
-        method.setAccessible(true);
-        boolean isEnabled = (boolean) method.invoke(FACTORY, (Dsn) null);
-        assertThat(isEnabled).isFalse();
+    void testToInitializeGracefulShutdownEnabled() {
+        assertThat(FACTORY.getBufferedConnectionGracefulShutdownEnabled(null)).isFalse();
     }
 
     @Test
-    void testToInitializeAsyncEnabled() throws Exception {
-        Method method = DefaultSentryClientFactory.class.getDeclaredMethod("getAsyncEnabled", Dsn.class);
-        method.setAccessible(true);
-        boolean isEnabled = (boolean) method.invoke(FACTORY, (Dsn) null);
-        assertThat(isEnabled).isFalse();
+    void testToInitializeAsyncEnabled() {
+        assertThat(FACTORY.getAsyncEnabled(null)).isFalse();
     }
 
     @Test

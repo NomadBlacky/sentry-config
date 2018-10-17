@@ -63,25 +63,16 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
             client.setExtra(map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
         });
 
-        // Same Frame as Enclosing Exception
-        tryToConfigureBooleanValue(HIDE_COMMON_FRAMES_OPTION, settingSentryProperty(HIDE_COMMON_FRAMES_OPTION));
-
         // Event Sampling
         tryToConfigureDoubleValue(SAMPLE_RATE_OPTION, settingSentryProperty(SAMPLE_RATE_OPTION));
 
-        // Uncaught Exception Handler
-        tryToConfigureBooleanValue(UNCAUGHT_HANDLER_ENABLED_OPTION, settingSentryProperty(UNCAUGHT_HANDLER_ENABLED_OPTION));
-
         // Buffering
-        tryToConfigureBooleanValue(BUFFER_ENABLED_OPTION, settingSentryProperty(BUFFER_ENABLED_OPTION));
         tryToConfigreStringValue(BUFFER_DIR_OPTION, settingSentryProperty(BUFFER_DIR_OPTION));
         tryToConfigureIntValue(BUFFER_SIZE_OPTION, settingSentryProperty(BUFFER_SIZE_OPTION));
         tryToConfigureLongValue(BUFFER_FLUSHTIME_OPTION, settingSentryProperty(BUFFER_FLUSHTIME_OPTION));
         tryToConfigureLongValue(BUFFER_SHUTDOWN_TIMEOUT_OPTION, settingSentryProperty(BUFFER_SHUTDOWN_TIMEOUT_OPTION));
-        tryToConfigureBooleanValue(BUFFER_GRACEFUL_SHUTDOWN_OPTION, settingSentryProperty(BUFFER_GRACEFUL_SHUTDOWN_OPTION));
 
         // Async Connection
-        tryToConfigureBooleanValue("async.enabled", settingSentryProperty(ASYNC_OPTION));
         tryToConfigureLongValue(ASYNC_SHUTDOWN_TIMEOUT_OPTION, settingSentryProperty(ASYNC_SHUTDOWN_TIMEOUT_OPTION));
 
         return configureSentryClient(client, defaultDsn);
@@ -120,7 +111,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected boolean getAsyncEnabled(Dsn dsn) {
-        return super.getAsyncEnabled(dsn);
+        return tryToGetBoolean("async.enabled").orElseGet(() -> super.getAsyncEnabled(dsn));
     }
 
     @Override
@@ -135,7 +126,9 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected boolean getBufferedConnectionGracefulShutdownEnabled(Dsn dsn) {
-        return super.getBufferedConnectionGracefulShutdownEnabled(dsn);
+        return tryToGetBoolean(BUFFER_GRACEFUL_SHUTDOWN_OPTION).orElseGet(
+                () -> super.getBufferedConnectionGracefulShutdownEnabled(dsn)
+        );
     }
 
     @Override
@@ -150,7 +143,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected boolean getAsyncGracefulShutdownEnabled(Dsn dsn) {
-        return super.getAsyncGracefulShutdownEnabled(dsn);
+        return tryToGetBoolean(ASYNC_GRACEFUL_SHUTDOWN_OPTION).orElseGet(() -> super.getAsyncGracefulShutdownEnabled(dsn));
     }
 
     @Override
@@ -240,12 +233,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected boolean getCompressionEnabled(Dsn dsn) {
-        return super.getCompressionEnabled(dsn);
+        return tryToGetBoolean(COMPRESSION_OPTION).orElseGet(() -> super.getCompressionEnabled(dsn));
     }
 
     @Override
     protected boolean getHideCommonFramesEnabled(Dsn dsn) {
-        return super.getHideCommonFramesEnabled(dsn);
+        return tryToGetBoolean(HIDE_COMMON_FRAMES_OPTION).orElseGet(() -> super.getHideCommonFramesEnabled(dsn));
     }
 
     @Override
@@ -260,7 +253,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected boolean getBufferEnabled(Dsn dsn) {
-        return super.getBufferEnabled(dsn);
+        return tryToGetBoolean(BUFFER_ENABLED_OPTION).orElseGet(() -> super.getBufferEnabled(dsn));
     }
 
     @Override
@@ -275,12 +268,19 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected boolean getUncaughtHandlerEnabled(Dsn dsn) {
-        return super.getUncaughtHandlerEnabled(dsn);
+        return tryToGetBoolean(UNCAUGHT_HANDLER_ENABLED_OPTION).orElseGet(() -> super.getUncaughtHandlerEnabled(dsn));
     }
 
     private Optional<String> tryToGetString(String path) {
         if (config.hasPath(path)) {
             return Optional.of(config.getString(path));
+        }
+        return Optional.empty();
+    }
+
+    private Optional<Boolean> tryToGetBoolean(String path) {
+        if (config.hasPath(path)) {
+            return Optional.of(config.getBoolean(path));
         }
         return Optional.empty();
     }
@@ -303,10 +303,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     private void tryToConfigureDoubleValue(String path, Consumer<Double> configProc) {
         tryToConfigure(path, configProc, () -> config.getDouble(path));
-    }
-
-    private void tryToConfigureBooleanValue(String path, Consumer<Boolean> configProc) {
-        tryToConfigure(path, configProc, () -> config.getBoolean(path));
     }
 
     private void tryToConfigMapValue(String path, Consumer<Map<String, String>> configProc) {
