@@ -140,7 +140,7 @@ class SentryClientFactoryEmptyCaseTest {
     @Test
     @Ignore
     void getTags() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getTags(null)).isEmpty();
     }
 
     @Test
@@ -152,13 +152,13 @@ class SentryClientFactoryEmptyCaseTest {
     @Test
     @Ignore
     void getMdcTags() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getMdcTags(null)).isEmpty();
     }
 
     @Test
     @Ignore
     void getExtra() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getExtra(null)).isEmpty();
     }
 
     @Test

@@ -13,6 +13,7 @@ import io.sentry.dsn.Dsn;
 import java.util.*;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -213,7 +214,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected Map<String, String> getTags(Dsn dsn) {
-        return super.getTags(dsn);
+        return tryToGetMap(TAGS_OPTION).orElseGet(() -> super.getTags(dsn));
     }
 
     @Override
@@ -223,12 +224,14 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected Set<String> getMdcTags(Dsn dsn) {
-        return super.getMdcTags(dsn);
+        return tryToGetStringList(MDCTAGS_OPTION)
+                .<Set<String>>map(HashSet::new)
+                .orElseGet(() -> super.getMdcTags(dsn));
     }
 
     @Override
     protected Map<String, String> getExtra(Dsn dsn) {
-        return super.getExtra(dsn);
+        return tryToGetMap(EXTRA_OPTION).orElseGet(() -> super.getExtra(dsn));
     }
 
     @Override
@@ -281,6 +284,21 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
     private Optional<Boolean> tryToGetBoolean(String path) {
         if (config.hasPath(path)) {
             return Optional.of(config.getBoolean(path));
+        }
+        return Optional.empty();
+    }
+
+    private Optional<List<String>> tryToGetStringList(String path) {
+        if (config.hasPath(path)) {
+            return Optional.of(config.getStringList(path));
+        }
+        return Optional.empty();
+    }
+
+    private Optional<Map<String, String>> tryToGetMap(String path) {
+        if (config.hasPath(path)) {
+            return Optional.of(config.getConfig(path))
+                    .map(SentryClientFactory::configToMap);
         }
         return Optional.empty();
     }
