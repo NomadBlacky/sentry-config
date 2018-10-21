@@ -1,7 +1,6 @@
 package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.ConfigFactory;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +16,6 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getContextManager() {
         // FIXME: 2018/10/15 Implement this!
     }
@@ -33,13 +31,11 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getRejectedExecutionHandler() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getBufferedConnectionShutdownTimeout() {
         // FIXME: 2018/10/15 Implement this!
     }
@@ -50,13 +46,11 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getBufferFlushtime() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getAsyncShutdownTimeout() {
         // FIXME: 2018/10/15 Implement this!
     }
@@ -67,37 +61,31 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getAsyncQueueSize() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getAsyncPriority() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getAsyncThreads() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getBypassSecurityEnabled() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getSampleRate() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getProxyPort() {
         // FIXME: 2018/10/15 Implement this!
     }
@@ -138,25 +126,21 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getTags() {
         assertThat(FACTORY.getTags(null)).isEmpty();
     }
 
     @Test
-    @Ignore
     void getExtraTags() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getMdcTags() {
         assertThat(FACTORY.getMdcTags(null)).isEmpty();
     }
 
     @Test
-    @Ignore
     void getExtra() {
         assertThat(FACTORY.getExtra(null)).isEmpty();
     }
@@ -172,13 +156,11 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getMaxMessageLength() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getTimeout() {
         // FIXME: 2018/10/15 Implement this!
     }
@@ -189,13 +171,11 @@ class SentryClientFactoryEmptyCaseTest {
     }
 
     @Test
-    @Ignore
     void getBuffer() {
         // FIXME: 2018/10/15 Implement this!
     }
 
     @Test
-    @Ignore
     void getBufferSize() {
         // FIXME: 2018/10/15 Implement this!
     }
