@@ -10,6 +10,7 @@ buildscript {
 plugins {
     id 'java-library'
     id 'com.bmuschko.nexus' version '2.3.1'
+    id "com.github.spotbugs" version "1.6.5"
 }
 
 group = "com.github.nomadblacky"
@@ -60,4 +61,8 @@ modifyPom {
             }
         }
     }
+}
+
+spotbugs {
+    toolVersion = '3.1.8'
 }
