@@ -1,10 +1,13 @@
 package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.ConfigFactory;
+import io.sentry.marshaller.json.JsonMarshaller;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
+
+import static io.sentry.DefaultSentryClientFactory.*;
 
 class SentryClientFactoryEmptyCaseTest {
 
@@ -37,7 +40,7 @@ class SentryClientFactoryEmptyCaseTest {
 
     @Test
     void getBufferedConnectionShutdownTimeout() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getBufferedConnectionShutdownTimeout(null)).isEqualTo(BUFFER_SHUTDOWN_TIMEOUT_DEFAULT);
     }
 
     @Test
@@ -47,12 +50,12 @@ class SentryClientFactoryEmptyCaseTest {
 
     @Test
     void getBufferFlushtime() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getBufferFlushtime(null)).isEqualTo(BUFFER_FLUSHTIME_DEFAULT);
     }
 
     @Test
     void getAsyncShutdownTimeout() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getAsyncShutdownTimeout(null)).isEqualTo(ASYNC_SHUTDOWN_TIMEOUT_DEFAULT);
     }
 
     @Test
@@ -62,17 +65,17 @@ class SentryClientFactoryEmptyCaseTest {
 
     @Test
     void getAsyncQueueSize() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getAsyncQueueSize(null)).isEqualTo(QUEUE_SIZE_DEFAULT);
     }
 
     @Test
     void getAsyncPriority() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getAsyncPriority(null)).isEqualTo(Thread.MIN_PRIORITY);
     }
 
     @Test
     void getAsyncThreads() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getAsyncThreads(null)).isEqualTo(Runtime.getRuntime().availableProcessors());
     }
 
     @Test
@@ -82,12 +85,12 @@ class SentryClientFactoryEmptyCaseTest {
 
     @Test
     void getSampleRate() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getSampleRate(null)).isEqualTo(null);
     }
 
     @Test
     void getProxyPort() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getProxyPort(null)).isEqualTo(HTTP_PROXY_PORT_DEFAULT);
     }
 
     @Test
@@ -157,12 +160,12 @@ class SentryClientFactoryEmptyCaseTest {
 
     @Test
     void getMaxMessageLength() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getMaxMessageLength(null)).isEqualTo(JsonMarshaller.DEFAULT_MAX_MESSAGE_LENGTH);
     }
 
     @Test
     void getTimeout() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getTimeout(null)).isEqualTo(TIMEOUT_DEFAULT);
     }
 
     @Test
@@ -177,7 +180,7 @@ class SentryClientFactoryEmptyCaseTest {
 
     @Test
     void getBufferSize() {
-        // FIXME: 2018/10/15 Implement this!
+        assertThat(FACTORY.getBufferSize(null)).isEqualTo(BUFFER_SIZE_DEFAULT);
     }
 
     @Test

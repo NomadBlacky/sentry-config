@@ -53,28 +53,8 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
         SentryClient client = new SentryClient(createConnection(dsn), getContextManager(dsn));
 
-        // Tags
-        tryToConfigMapValue(TAGS_OPTION, client::setTags);
-
-        // MDC Tags
-        tryToConfigureStringListValue(MDCTAGS_OPTION, mdctags -> client.setMdcTags(new HashSet<>(mdctags)));
-
-        // Extra Data
-        tryToConfigMapValue(EXTRA_OPTION, map -> {
-            client.setExtra(map.entrySet().stream().collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue())));
-        });
-
-        // Event Sampling
-        tryToConfigureDoubleValue(SAMPLE_RATE_OPTION, settingSentryProperty(SAMPLE_RATE_OPTION));
-
         // Buffering
         tryToConfigreStringValue(BUFFER_DIR_OPTION, settingSentryProperty(BUFFER_DIR_OPTION));
-        tryToConfigureIntValue(BUFFER_SIZE_OPTION, settingSentryProperty(BUFFER_SIZE_OPTION));
-        tryToConfigureLongValue(BUFFER_FLUSHTIME_OPTION, settingSentryProperty(BUFFER_FLUSHTIME_OPTION));
-        tryToConfigureLongValue(BUFFER_SHUTDOWN_TIMEOUT_OPTION, settingSentryProperty(BUFFER_SHUTDOWN_TIMEOUT_OPTION));
-
-        // Async Connection
-        tryToConfigureLongValue(ASYNC_SHUTDOWN_TIMEOUT_OPTION, settingSentryProperty(ASYNC_SHUTDOWN_TIMEOUT_OPTION));
 
         return configureSentryClient(client, defaultDsn);
     }
@@ -122,7 +102,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected long getBufferedConnectionShutdownTimeout(Dsn dsn) {
-        return super.getBufferedConnectionShutdownTimeout(dsn);
+        return tryToGetLong(BUFFER_SHUTDOWN_TIMEOUT_OPTION).orElseGet(() -> super.getBufferedConnectionShutdownTimeout(dsn));
     }
 
     @Override
@@ -134,12 +114,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected long getBufferFlushtime(Dsn dsn) {
-        return super.getBufferFlushtime(dsn);
+        return tryToGetLong(BUFFER_FLUSHTIME_OPTION).orElseGet(() -> super.getBufferFlushtime(dsn));
     }
 
     @Override
     protected long getAsyncShutdownTimeout(Dsn dsn) {
-        return super.getAsyncShutdownTimeout(dsn);
+        return tryToGetLong(ASYNC_SHUTDOWN_TIMEOUT_OPTION).orElseGet(() -> super.getAsyncShutdownTimeout(dsn));
     }
 
     @Override
@@ -149,17 +129,17 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected int getAsyncQueueSize(Dsn dsn) {
-        return super.getAsyncQueueSize(dsn);
+        return tryToGetInteger(ASYNC_QUEUE_SIZE_OPTION).orElseGet(() -> super.getAsyncQueueSize(dsn));
     }
 
     @Override
     protected int getAsyncPriority(Dsn dsn) {
-        return super.getAsyncPriority(dsn);
+        return tryToGetInteger(ASYNC_PRIORITY_OPTION).orElseGet(() -> super.getAsyncPriority(dsn));
     }
 
     @Override
     protected int getAsyncThreads(Dsn dsn) {
-        return super.getAsyncThreads(dsn);
+        return tryToGetInteger(ASYNC_THREADS_OPTION).orElseGet(() -> super.getAsyncThreads(dsn));
     }
 
     @Override
@@ -169,12 +149,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected Double getSampleRate(Dsn dsn) {
-        return super.getSampleRate(dsn);
+        return tryToGetDouble(SAMPLE_RATE_OPTION).orElseGet(() -> super.getSampleRate(dsn));
     }
 
     @Override
     protected int getProxyPort(Dsn dsn) {
-        return super.getProxyPort(dsn);
+        return tryToGetInteger(HTTP_PROXY_PORT_OPTION).orElseGet(() -> super.getProxyPort(dsn));
     }
 
     @Override
@@ -246,12 +226,12 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected int getMaxMessageLength(Dsn dsn) {
-        return super.getMaxMessageLength(dsn);
+        return tryToGetInteger(MAX_MESSAGE_LENGTH_OPTION).orElseGet(() -> super.getMaxMessageLength(dsn));
     }
 
     @Override
     protected int getTimeout(Dsn dsn) {
-        return super.getTimeout(dsn);
+        return tryToGetInteger(TIMEOUT_OPTION).orElseGet(() -> super.getTimeout(dsn));
     }
 
     @Override
@@ -266,12 +246,33 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
     @Override
     protected int getBufferSize(Dsn dsn) {
-        return super.getBufferSize(dsn);
+        return tryToGetInteger(BUFFER_SIZE_OPTION).orElseGet(() -> super.getBufferSize(dsn));
     }
 
     @Override
     protected boolean getUncaughtHandlerEnabled(Dsn dsn) {
         return tryToGetBoolean(UNCAUGHT_HANDLER_ENABLED_OPTION).orElseGet(() -> super.getUncaughtHandlerEnabled(dsn));
+    }
+
+    private Optional<Integer> tryToGetInteger(String path) {
+        if (config.hasPath(path)) {
+            return Optional.of(config.getInt(path));
+        }
+        return Optional.empty();
+    }
+
+    private Optional<Long> tryToGetLong(String path) {
+        if (config.hasPath(path)) {
+            return Optional.of(config.getLong(path));
+        }
+        return Optional.empty();
+    }
+
+    private Optional<Double> tryToGetDouble(String path) {
+        if (config.hasPath(path)) {
+            return Optional.of(config.getDouble(path));
+        }
+        return Optional.empty();
     }
 
     private Optional<String> tryToGetString(String path) {
