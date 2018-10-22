@@ -9,29 +9,28 @@ import org.slf4j.MDC;
 
 public class App {
 
-    private static void manualUsage() {
-        EventBuilder eventBuilder = new EventBuilder()
-                .withMessage("This is a test!")
-                .withLevel(Event.Level.INFO);
+  private static void manualUsage() {
+    EventBuilder eventBuilder =
+        new EventBuilder().withMessage("This is a test!").withLevel(Event.Level.INFO);
 
-        Sentry.capture(eventBuilder);
+    Sentry.capture(eventBuilder);
+  }
+
+  private static void withLogback() {
+    Logger logger = LoggerFactory.getLogger(App.class);
+
+    try (MDC.MDCCloseable closeable = MDC.putCloseable("sampleMdcTag", "Hey!")) {
+      logger.warn("WARN from Logback!");
     }
+  }
 
-    private static void withLogback() {
-        Logger logger = LoggerFactory.getLogger(App.class);
+  private static void uncaughtException() {
+    throw new RuntimeException("This is an uncaught exception!");
+  }
 
-        try (MDC.MDCCloseable closeable = MDC.putCloseable("sampleMdcTag", "Hey!")) {
-            logger.warn("WARN from Logback!");
-        }
-    }
-
-    private static void uncaughtException() {
-        throw new RuntimeException("This is an uncaught exception!");
-    }
-
-    public static void main(String[] args) {
-        manualUsage();
-        withLogback();
-        uncaughtException();
-    }
+  public static void main(String[] args) {
+    manualUsage();
+    withLogback();
+    uncaughtException();
+  }
 }
