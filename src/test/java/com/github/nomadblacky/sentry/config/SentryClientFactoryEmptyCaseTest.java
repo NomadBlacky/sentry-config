@@ -18,11 +18,6 @@ class SentryClientFactoryEmptyCaseTest {
   }
 
   @Test
-  void getContextManager() {
-    // FIXME: 2018/10/15 Implement this!
-  }
-
-  @Test
   void getInAppFrames() {
     assertThat(FACTORY.getInAppFrames(null)).isEmpty();
   }
@@ -30,11 +25,6 @@ class SentryClientFactoryEmptyCaseTest {
   @Test
   void getAsyncEnabled() {
     assertThat(FACTORY.getAsyncEnabled(null)).isTrue();
-  }
-
-  @Test
-  void getRejectedExecutionHandler() {
-    // FIXME: 2018/10/15 Implement this!
   }
 
   @Test
@@ -76,11 +66,6 @@ class SentryClientFactoryEmptyCaseTest {
   @Test
   void getAsyncThreads() {
     assertThat(FACTORY.getAsyncThreads(null)).isEqualTo(Runtime.getRuntime().availableProcessors());
-  }
-
-  @Test
-  void getBypassSecurityEnabled() {
-    // FIXME: 2018/10/15 Implement this!
   }
 
   @Test
@@ -131,11 +116,6 @@ class SentryClientFactoryEmptyCaseTest {
   @Test
   void getTags() {
     assertThat(FACTORY.getTags(null)).isEmpty();
-  }
-
-  @Test
-  void getExtraTags() {
-    // FIXME: 2018/10/15 Implement this!
   }
 
   @Test

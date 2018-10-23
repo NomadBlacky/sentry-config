@@ -7,10 +7,8 @@ import com.typesafe.config.ConfigValueType;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
 import io.sentry.buffer.Buffer;
-import io.sentry.context.ContextManager;
 import io.sentry.dsn.Dsn;
 import java.util.*;
-import java.util.concurrent.RejectedExecutionHandler;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -56,11 +54,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
   }
 
   @Override
-  protected ContextManager getContextManager(Dsn dsn) {
-    return super.getContextManager(dsn);
-  }
-
-  @Override
   protected Collection<String> getInAppFrames(Dsn dsn) {
     ConfigValue configValue;
     if (config.hasPath(IN_APP_FRAMES_OPTION)) {
@@ -86,11 +79,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
   @Override
   protected boolean getAsyncEnabled(Dsn dsn) {
     return tryToGetBoolean("async.enabled").orElseGet(() -> super.getAsyncEnabled(dsn));
-  }
-
-  @Override
-  protected RejectedExecutionHandler getRejectedExecutionHandler(Dsn dsn) {
-    return super.getRejectedExecutionHandler(dsn);
   }
 
   @Override
@@ -135,11 +123,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
   @Override
   protected int getAsyncThreads(Dsn dsn) {
     return tryToGetInteger(ASYNC_THREADS_OPTION).orElseGet(() -> super.getAsyncThreads(dsn));
-  }
-
-  @Override
-  protected boolean getBypassSecurityEnabled(Dsn dsn) {
-    return super.getBypassSecurityEnabled(dsn);
   }
 
   @Override
@@ -190,11 +173,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
   @Override
   protected Map<String, String> getTags(Dsn dsn) {
     return tryToGetMap(TAGS_OPTION).orElseGet(() -> super.getTags(dsn));
-  }
-
-  @Override
-  protected Set<String> getExtraTags(Dsn dsn) {
-    return super.getExtraTags(dsn);
   }
 
   @Override
@@ -303,26 +281,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
   private void tryToConfigreStringValue(String path, Consumer<String> configProc) {
     tryToConfigure(path, configProc, () -> config.getString(path));
-  }
-
-  private void tryToConfigureStringListValue(String path, Consumer<List<String>> configProc) {
-    tryToConfigure(path, configProc, () -> config.getStringList(path));
-  }
-
-  private void tryToConfigureIntValue(String path, Consumer<Integer> configProc) {
-    tryToConfigure(path, configProc, () -> config.getInt(path));
-  }
-
-  private void tryToConfigureLongValue(String path, Consumer<Long> configProc) {
-    tryToConfigure(path, configProc, () -> config.getLong(path));
-  }
-
-  private void tryToConfigureDoubleValue(String path, Consumer<Double> configProc) {
-    tryToConfigure(path, configProc, () -> config.getDouble(path));
-  }
-
-  private void tryToConfigMapValue(String path, Consumer<Map<String, String>> configProc) {
-    tryToConfigure(path, configProc, () -> configToMap(config.getConfig(path)));
   }
 
   private <T> void tryToConfigure(String path, Consumer<T> configProc, Supplier<T> valueSupplier) {
