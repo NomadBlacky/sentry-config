@@ -6,9 +6,11 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
-import io.sentry.config.Lookup;
+import io.sentry.buffer.Buffer;
+import io.sentry.buffer.DiskBuffer;
 import io.sentry.dsn.Dsn;
 import io.sentry.jvmti.FrameCache;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -101,8 +103,8 @@ class SentryClientFactoryTest {
 
   @Test
   void testToInitializeBufferDir() {
-    String bufferDir = Lookup.lookup(DefaultSentryClientFactory.BUFFER_DIR_OPTION, null);
-    assertThat(bufferDir).isEqualTo("./buffer");
+    Buffer expect = new DiskBuffer(new File("./buffer"), 100);
+    assertThat(FACTORY.getBuffer(null)).isEqualToComparingFieldByField(expect);
   }
 
   @Test

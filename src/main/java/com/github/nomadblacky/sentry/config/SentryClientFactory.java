@@ -7,7 +7,9 @@ import com.typesafe.config.ConfigValueType;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
 import io.sentry.buffer.Buffer;
+import io.sentry.buffer.DiskBuffer;
 import io.sentry.dsn.Dsn;
+import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -137,37 +139,37 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
   @Override
   protected String getProxyHost(Dsn dsn) {
-    return tryToGetString(HTTP_PROXY_HOST_OPTION).orElseGet(() -> super.getProxyHost(dsn));
+    return tryToGetNonEmptyString(HTTP_PROXY_HOST_OPTION).orElseGet(() -> super.getProxyHost(dsn));
   }
 
   @Override
   protected String getProxyUser(Dsn dsn) {
-    return tryToGetString(HTTP_PROXY_USER_OPTION).orElseGet(() -> super.getProxyUser(dsn));
+    return tryToGetNonEmptyString(HTTP_PROXY_USER_OPTION).orElseGet(() -> super.getProxyUser(dsn));
   }
 
   @Override
   protected String getProxyPass(Dsn dsn) {
-    return tryToGetString(HTTP_PROXY_PASS_OPTION).orElseGet(() -> super.getProxyPass(dsn));
+    return tryToGetNonEmptyString(HTTP_PROXY_PASS_OPTION).orElseGet(() -> super.getProxyPass(dsn));
   }
 
   @Override
   protected String getRelease(Dsn dsn) {
-    return tryToGetString(RELEASE_OPTION).orElseGet(() -> super.getRelease(dsn));
+    return tryToGetNonEmptyString(RELEASE_OPTION).orElseGet(() -> super.getRelease(dsn));
   }
 
   @Override
   protected String getDist(Dsn dsn) {
-    return tryToGetString(DIST_OPTION).orElseGet(() -> super.getDist(dsn));
+    return tryToGetNonEmptyString(DIST_OPTION).orElseGet(() -> super.getDist(dsn));
   }
 
   @Override
   protected String getEnvironment(Dsn dsn) {
-    return tryToGetString(ENVIRONMENT_OPTION).orElseGet(() -> super.getEnvironment(dsn));
+    return tryToGetNonEmptyString(ENVIRONMENT_OPTION).orElseGet(() -> super.getEnvironment(dsn));
   }
 
   @Override
   protected String getServerName(Dsn dsn) {
-    return tryToGetString(SERVERNAME_OPTION).orElseGet(() -> super.getServerName(dsn));
+    return tryToGetNonEmptyString(SERVERNAME_OPTION).orElseGet(() -> super.getServerName(dsn));
   }
 
   @Override
@@ -216,7 +218,9 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
   @Override
   protected Buffer getBuffer(Dsn dsn) {
-    return super.getBuffer(dsn);
+    return tryToGetNonEmptyString(BUFFER_DIR_OPTION)
+        .<Buffer>map(s -> new DiskBuffer(new File(s), getBufferSize(dsn)))
+        .orElseGet(() -> super.getBuffer(dsn));
   }
 
   @Override
@@ -251,9 +255,9 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
     return Optional.empty();
   }
 
-  private Optional<String> tryToGetString(String path) {
+  private Optional<String> tryToGetNonEmptyString(String path) {
     if (config.hasPath(path)) {
-      return Optional.of(config.getString(path));
+      return Optional.of(config.getString(path)).filter(s -> !s.isEmpty());
     }
     return Optional.empty();
   }

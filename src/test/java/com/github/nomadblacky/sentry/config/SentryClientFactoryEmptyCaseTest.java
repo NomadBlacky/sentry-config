@@ -156,7 +156,7 @@ class SentryClientFactoryEmptyCaseTest {
 
   @Test
   void getBuffer() {
-    // FIXME: 2018/10/15 Implement this!
+    assertThat(FACTORY.getBuffer(null)).isNull();
   }
 
   @Test
