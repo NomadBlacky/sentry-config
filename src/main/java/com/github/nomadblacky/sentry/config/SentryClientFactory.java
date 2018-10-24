@@ -11,8 +11,6 @@ import io.sentry.buffer.DiskBuffer;
 import io.sentry.dsn.Dsn;
 import java.io.File;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class SentryClientFactory extends DefaultSentryClientFactory {
@@ -48,9 +46,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
     }
 
     SentryClient client = new SentryClient(createConnection(dsn), getContextManager(dsn));
-
-    // Buffering
-    tryToConfigreStringValue(BUFFER_DIR_OPTION, settingSentryProperty(BUFFER_DIR_OPTION));
 
     return configureSentryClient(client, defaultDsn);
   }
@@ -281,22 +276,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
       return Optional.of(config.getConfig(path)).map(SentryClientFactory::configToMap);
     }
     return Optional.empty();
-  }
-
-  private void tryToConfigreStringValue(String path, Consumer<String> configProc) {
-    tryToConfigure(path, configProc, () -> config.getString(path));
-  }
-
-  private <T> void tryToConfigure(String path, Consumer<T> configProc, Supplier<T> valueSupplier) {
-    if (config.hasPath(path)) {
-      configProc.accept(valueSupplier.get());
-    }
-  }
-
-  private static final String SENTRY_PROPERTY_PREFIX = "sentry.";
-
-  private static <T> Consumer<T> settingSentryProperty(String suffix) {
-    return obj -> System.setProperty(SENTRY_PROPERTY_PREFIX + suffix, obj.toString());
   }
 
   static Map<String, String> configToMap(Config config) {
