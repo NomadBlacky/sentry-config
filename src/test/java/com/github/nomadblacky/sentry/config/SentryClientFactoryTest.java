@@ -21,6 +21,7 @@ class SentryClientFactoryTest {
 
   @Test
   void initializeDsn() {
+    FACTORY.createSentryClient(null);
     assertThat(FACTORY.dsnString).isEqualTo("noop://localhost/1");
   }
 

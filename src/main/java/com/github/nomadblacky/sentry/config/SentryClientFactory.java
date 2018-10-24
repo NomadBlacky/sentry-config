@@ -2,7 +2,6 @@ package com.github.nomadblacky.sentry.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueType;
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
@@ -15,8 +14,17 @@ import java.util.stream.Collectors;
 
 public class SentryClientFactory extends DefaultSentryClientFactory {
 
-  /** Entry point from sentry-java. */
-  public SentryClientFactory() {}
+  /**
+   * Entry point from sentry-java.
+   *
+   * @throws com.typesafe.config.ConfigException.Missing if "sentry" path is absent or null in
+   *     default configuration
+   * @throws com.typesafe.config.ConfigException.WrongType if "sentry" path is not convertible to a
+   *     Config in default configuration
+   */
+  public SentryClientFactory() {
+    this.config = ConfigFactory.load().getConfig("sentry");
+  }
 
   /**
    * Initialize by specified configuration.
@@ -34,10 +42,6 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
   @Override
   public SentryClient createSentryClient(Dsn defaultDsn) {
-    if (this.config == null) {
-      config = ConfigFactory.load().getConfig("sentry");
-    }
-
     // DSN
     Dsn dsn = defaultDsn;
     if (config.hasPath("dsn")) {
@@ -52,25 +56,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
   @Override
   protected Collection<String> getInAppFrames(Dsn dsn) {
-    ConfigValue configValue;
-    if (config.hasPath(IN_APP_FRAMES_OPTION)) {
-      configValue = config.getValue(IN_APP_FRAMES_OPTION);
-    } else {
-      return super.getInAppFrames(dsn);
-    }
-
-    if (configValue.valueType() == ConfigValueType.STRING) {
-      String value = config.getString(IN_APP_FRAMES_OPTION);
-      List<String> packages =
-          Arrays.stream(value.split(","))
-              .filter(pkg -> !pkg.trim().equals(""))
-              .collect(Collectors.toList());
-      return packages;
-    } else if (configValue.valueType() == ConfigValueType.LIST) {
-      List<String> pkgs = config.getStringList(IN_APP_FRAMES_OPTION);
-      return pkgs.stream().filter(pkg -> !pkg.trim().equals("")).collect(Collectors.toList());
-    }
-    return super.getInAppFrames(dsn);
+    return tryToGetStringList(IN_APP_FRAMES_OPTION).orElseGet(() -> super.getInAppFrames(dsn));
   }
 
   @Override
@@ -264,7 +250,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
     return Optional.empty();
   }
 
-  private Optional<List<String>> tryToGetStringList(String path) {
+  private Optional<Collection<String>> tryToGetStringList(String path) {
     if (config.hasPath(path)) {
       return Optional.of(config.getStringList(path));
     }
