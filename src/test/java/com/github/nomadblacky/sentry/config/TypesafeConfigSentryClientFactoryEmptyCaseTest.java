@@ -8,13 +8,13 @@ import io.sentry.marshaller.json.JsonMarshaller;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class SentryClientFactoryEmptyCaseTest {
+class TypesafeConfigSentryClientFactoryEmptyCaseTest {
 
-  private static SentryClientFactory FACTORY;
+  private static TypesafeConfigSentryClientFactory FACTORY;
 
   @BeforeAll
   static void beforeAll() {
-    FACTORY = new SentryClientFactory(ConfigFactory.empty());
+    FACTORY = new TypesafeConfigSentryClientFactory(ConfigFactory.empty());
   }
 
   @Test

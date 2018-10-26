@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SentryClientFactory extends DefaultSentryClientFactory {
+public abstract class DefaultTypesafeConfigSentryClientFactory extends DefaultSentryClientFactory {
 
   /**
    * Entry point from sentry-java.
@@ -22,7 +22,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
    * @throws com.typesafe.config.ConfigException.WrongType if "sentry" path is not convertible to a
    *     Config in default configuration
    */
-  public SentryClientFactory() {
+  public DefaultTypesafeConfigSentryClientFactory() {
     this.config = ConfigFactory.load().getConfig("sentry");
   }
 
@@ -31,7 +31,7 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
    *
    * @param config configuration
    */
-  public SentryClientFactory(Config config) {
+  public DefaultTypesafeConfigSentryClientFactory(Config config) {
     this.config = config;
   }
 
@@ -259,7 +259,8 @@ public class SentryClientFactory extends DefaultSentryClientFactory {
 
   private Optional<Map<String, String>> tryToGetMap(String path) {
     if (config.hasPath(path)) {
-      return Optional.of(config.getConfig(path)).map(SentryClientFactory::configToMap);
+      return Optional.of(config.getConfig(path))
+          .map(DefaultTypesafeConfigSentryClientFactory::configToMap);
     }
     return Optional.empty();
   }

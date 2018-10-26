@@ -10,13 +10,13 @@ import java.io.File;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class SentryClientFactoryTest {
+class TypesafeConfigSentryClientFactoryTest {
 
-  private static SentryClientFactory FACTORY;
+  private static TypesafeConfigSentryClientFactory FACTORY;
 
   @BeforeAll
   static void beforeAll() {
-    FACTORY = new SentryClientFactory();
+    FACTORY = new TypesafeConfigSentryClientFactory();
   }
 
   @Test
@@ -182,7 +182,7 @@ class SentryClientFactoryTest {
   void configToMap() {
     Config config = ConfigFactory.parseString("hoge = { invalid = 1234.56 }");
     assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> SentryClientFactory.configToMap(config))
+        .isThrownBy(() -> DefaultTypesafeConfigSentryClientFactory.configToMap(config))
         .withMessageContaining("Invalid configuration type (NUMBER) of \"hoge.invalid\"");
   }
 }
