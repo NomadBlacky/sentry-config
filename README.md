@@ -10,20 +10,20 @@ Using Maven:
 <dependency>
     <groupId>com.github.nomadblacky</groupId>
     <artifactId>sentry-config</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
 Using Gradle:
 
 ```groovy
-compile 'com.github.nomadblacky:sentry-config:0.3.0'
+compile 'com.github.nomadblacky:sentry-config:0.4.0'
 ```
 
 Using SBT:
 
 ```scala
-libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.3.0"
+libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.4.0"
 ```
 
 ## Usage

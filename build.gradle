@@ -17,7 +17,7 @@ plugins {
 }
 
 group = "com.github.nomadblacky"
-version = "0.3.0"
+version = "0.4.0"
 description = "Configure sentry-java by typesafe-config."
 
 sourceCompatibility = 1.8
