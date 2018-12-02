@@ -1,6 +1,7 @@
 package com.github.nomadblacky.sentry.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
@@ -25,11 +26,16 @@ public class CustomClientFactoryTest {
 
   private static class CustomEventBuilderHelper implements EventBuilderHelper {
 
-    static boolean executed = false;
+    static final Runnable runnable;
+
+    static {
+      runnable = mock(Runnable.class);
+      doNothing().when(runnable).run();
+    }
 
     @Override
     public void helpBuildingEvent(EventBuilder eventBuilder) {
-      executed = true;
+      runnable.run();
     }
   }
 
@@ -49,6 +55,6 @@ public class CustomClientFactoryTest {
   @Test
   void shouldBeExecuteHelpBuildingEvent() {
     CLIENT.sendMessage("!!!");
-    assertThat(CustomEventBuilderHelper.executed).isTrue();
+    verify(CustomEventBuilderHelper.runnable).run();
   }
 }
