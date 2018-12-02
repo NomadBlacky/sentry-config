@@ -1,3 +1,5 @@
+import com.github.spotbugs.SpotBugsTask
+
 buildscript {
     repositories {
         jcenter()
@@ -68,4 +70,12 @@ modifyPom {
 
 spotbugs {
     toolVersion = '3.1.8'
+}
+
+tasks.withType(SpotBugsTask) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+    pluginClasspath = project.configurations.spotbugsPlugins
 }
