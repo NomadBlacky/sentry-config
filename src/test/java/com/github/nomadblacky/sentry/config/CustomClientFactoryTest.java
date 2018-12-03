@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test;
 public class CustomClientFactoryTest {
 
   private static class CustomSentryClientFactory extends DefaultTypesafeConfigSentryClientFactory {
-    public CustomSentryClientFactory() {}
-
     @Override
     public SentryClient createSentryClient(Dsn defaultDsn) {
       SentryClient client = super.createSentryClient(defaultDsn);

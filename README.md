@@ -30,8 +30,6 @@ libraryDependencies += "com.github.nomadblacky" % "sentry-config" % "0.4.0"
 
 ### Set configurations in `application.conf`
 
-[See the examples in `src/test/resources/application.conf`.](src/test/resources/application.conf)
-
 ```
 sentry {
   dsn = "https://public:private@host:port/1"
@@ -47,6 +45,8 @@ Using JVM options:
 $ java -Dsentry.factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 ```
 
+or
+
 Using `sentry.properties`:
 
 ```
@@ -55,43 +55,43 @@ factory=com.github.nomadblacky.sentry.config.SentryClientFactory
 
 ## Supported [configurations](https://docs.sentry.io/clients/java/config/)
 
-| Key                                | Supported   |
-| :--------------------------------- | :---------: |
-| ASYNC_GRACEFUL_SHUTDOWN_OPTION     |             |
-| ASYNC_OPTION                       | true        |
-| ASYNC_PRIORITY_OPTION              |             |
-| ASYNC_QUEUE_DISCARDNEW             |             |
-| ASYNC_QUEUE_DISCARDOLD             |             |
-| ASYNC_QUEUE_DISCARDOLD             |             |
-| ASYNC_QUEUE_OVERFLOW_OPTION        |             |
-| ASYNC_QUEUE_SIZE_OPTION            |             |
-| ASYNC_QUEUE_SYNC                   |             |
-| ASYNC_SHUTDOWN_TIMEOUT_OPTION      | true        |
-| ASYNC_THREADS_OPTION               |             |
-| BUFFER_DIR_OPTION                  | true        |
-| BUFFER_ENABLED_OPTION              | true        |
-| BUFFER_FLUSHTIME_OPTION            | true        |
-| BUFFER_GRACEFUL_SHUTDOWN_OPTION    | true        |
-| BUFFER_SHUTDOWN_TIMEOUT_OPTION     | true        |
-| BUFFER_SIZE_OPTION                 | true        |
-| COMPRESSION_OPTION                 |             |
-| DIST_OPTION                        | true        |
-| DSN                                | true        |
-| ENVIRONMENT_OPTION                 | true        |
-| EXTRATAGS_OPTION (Deprecated)      |             |
-| EXTRA_OPTION                       | true        |
-| HIDE_COMMON_FRAMES_OPTION          | true        |
-| HTTP_PROXY_HOST_OPTION             |             |
-| HTTP_PROXY_PASS_OPTION             |             |
-| HTTP_PROXY_PORT_OPTION             |             |
-| HTTP_PROXY_USER_OPTION             |             |
-| IN_APP_FRAMES_OPTION               | true        |
-| MAX_MESSAGE_LENGTH_OPTION          |             |
-| MDCTAGS_OPTION                     | true        |
-| NAIVE_PROTOCOL                     |             |
-| RELEASE_OPTION                     | true        |
-| SAMPLE_RATE_OPTION                 | true        |
-| SERVERNAME_OPTION                  | true        |
-| TAGS_OPTION                        | true        |
-| TIMEOUT_OPTION                     |             |
-| UNCAUGHT_HANDLER_ENABLED_OPTION    | true        |
+[See the examples in `src/test/resources/application.conf`.](src/test/resources/application.conf)
+
+## Custom client factories
+
+### Implementation
+
+```java
+package sample;
+
+import com.github.nomadblacky.sentry.config.DefaultTypesafeConfigSentryClientFactory;
+
+public class MyCustomSentryClientFactory extends DefaultTypesafeConfigSentryClientFactory {
+    @Override
+    public SentryClient createSentryClient(Dsn dsn) {
+        // Initialize a SentryClient with typesafe-config.
+        SentryClient client = super.createSentryClient(dsn);
+        client.addBuilderHelper(new CustomEventBuilderHelper());
+        return client;
+    }
+}
+
+public class CustomEventBuilderHelper implements EventBuilderHelper { 
+    @Override
+    public void helpBuildingEvent(EventBuilder eventBuilder) {
+        // Helping to build events!
+    }
+}
+```
+
+### Usage
+
+```
+$ java -Dsentry.factory=sample.MyCustomSentryClientFactory
+```
+
+or
+
+```
+factory=sample.MyCustomSentryClientFactory
+```
